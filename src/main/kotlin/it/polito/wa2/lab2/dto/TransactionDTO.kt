@@ -9,10 +9,11 @@ data class TransactionDTO(
     @field:Min(0)
     val amount: BigDecimal,
     @field:NotNull
-    val from: Long?,
+    val from: Long,
     @field:NotNull
-    val to: Long?,
+    val to: Long,
     @field:NotNull
     val timestamp: LocalDateTime,
-    val id: Long? = null
+    @field:NotNull
+    val id: Long
 )

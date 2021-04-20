@@ -34,8 +34,8 @@ final class Transaction(
 fun Transaction.toDTO(): TransactionDTO =
     TransactionDTO(
         amount,
-        from.getId(),
-        to.getId(),
+        from.getId() as Long,
+        to.getId() as Long,
         timestamp,
-        getId()
+        getId() as Long
     )

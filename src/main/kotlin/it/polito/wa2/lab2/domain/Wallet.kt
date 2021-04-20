@@ -33,7 +33,7 @@ final class Wallet(
 
 fun Wallet.toDTO(): WalletDTO =
     WalletDTO(
-        owner.getId(),
+        owner.getId() as Long,
         currentAmount,
-        getId()
+        getId() as Long
     )

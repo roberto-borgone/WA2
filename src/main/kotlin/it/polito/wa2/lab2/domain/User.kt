@@ -1,5 +1,7 @@
 package it.polito.wa2.lab2.domain
 
+import it.polito.wa2.lab2.dto.UserDetailsDTO
+import org.springframework.security.core.GrantedAuthority
 import javax.persistence.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
@@ -9,10 +11,18 @@ enum class RoleName{
 
     CUSTOMER, ADMIN;
 
-    override fun toString(): String = if(this == ADMIN) "ADMIN" else "CUSTOMER"
+    override fun toString(): String = when{
+        this == ADMIN -> "ADMIN"
+        this == CUSTOMER -> "CUSTOMER"
+        else -> ""
+    }
 }
 
-fun String.toRoleName() = if (this == "ADMIN") RoleName.ADMIN else RoleName.CUSTOMER
+fun String.toRoleName(): RoleName? = when{
+    this == "ADMIN" -> RoleName.ADMIN
+    this == "CUSTOMER" -> RoleName.CUSTOMER
+    else -> null
+}
 
 @Entity
 @Table(indexes = [Index(name = "index", columnList = "username", unique = true)])
@@ -37,7 +47,8 @@ class User(
     var customerProfile: Customer? = null
 ): EntityBase<Long>() {
 
-    fun getRoles(): Set<RoleName> = roles.split(":").map { it.toRoleName() }.toSet()
+    fun getRoles(): Set<RoleName> = roles.split(":").map { it.toRoleName() as RoleName }.toSet()
+
     fun addRole(role: RoleName){
         if(!roles.contains(role.toString())) {
             if (roles.isEmpty()) roles += role else roles += ":$role"
@@ -49,3 +60,12 @@ class User(
         }
     }
 }
+
+fun User.toDTO(): UserDetailsDTO =
+    UserDetailsDTO(
+        username,
+        password,
+        email,
+        getRoles().map { GrantedAuthority { it.toString() } }.toMutableSet(),
+        isEnabled
+    )

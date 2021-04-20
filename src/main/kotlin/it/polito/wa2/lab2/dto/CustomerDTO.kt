@@ -12,5 +12,6 @@ data class CustomerDTO(
     val address: String,
     @field:NotNull
     val wallets: List<Long?> = listOf(),
-    val id: Long? = null
+    @field:NotNull
+    val id: Long
 )

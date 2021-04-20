@@ -6,8 +6,9 @@ import javax.validation.constraints.NotNull
 
 data class WalletDTO(
     @field:NotNull
-    val owner: Long?,
+    val owner: Long,
     @field:Min(0)
     val currentAmount: BigDecimal = BigDecimal(0.0),
-    val id: Long? = null
+    @field:NotNull
+    val id: Long
 )

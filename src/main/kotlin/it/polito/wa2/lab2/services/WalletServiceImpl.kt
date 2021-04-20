@@ -6,10 +6,7 @@ import it.polito.wa2.lab2.domain.Wallet
 import it.polito.wa2.lab2.domain.toDTO
 import it.polito.wa2.lab2.dto.TransactionDTO
 import it.polito.wa2.lab2.dto.WalletDTO
-import it.polito.wa2.lab2.repositories.CustomerRepository
-import it.polito.wa2.lab2.repositories.TransactionRepository
-import it.polito.wa2.lab2.repositories.WalletRepository
-import it.polito.wa2.lab2.repositories.findInWalletById
+import it.polito.wa2.lab2.repositories.*
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -49,15 +46,15 @@ class WalletServiceImpl(
     }
 
     override fun getWalletTransactions(walletId: Long): List<TransactionDTO> =
-        walletRepo.findById(walletId)
-            .orElseThrow { WalletNotFoundException(walletId) }
-            .getTransactions().map { it.toDTO() }
+        if(walletRepo.existsById(walletId))
+            transactionRepo.findAllInWallet(walletId).map { it.toDTO() }
+        else throw WalletNotFoundException(walletId)
 
 
     override fun getWalletTransactionsInDateRange(walletId: Long, range: ClosedRange<LocalDateTime>): List<TransactionDTO> =
-        walletRepo.findById(walletId)
-            .orElseThrow { WalletNotFoundException(walletId) }
-            .getTransactionsInRange(range).map { it.toDTO() }
+        if(walletRepo.existsById(walletId))
+            transactionRepo.findAllInWalletInRange(walletId, range).map { it.toDTO() }
+        else throw WalletNotFoundException(walletId)
 
     override fun getTransaction(walletId: Long, transactionId: Long): TransactionDTO =
         if(walletRepo.existsById(walletId))

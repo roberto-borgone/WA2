@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull
 @Entity
 final class Transaction(
     @field:Min(0)
+    @field:Column(nullable = false)
     val amount: BigDecimal,
     @field:NotNull
     @field:ManyToOne(fetch = FetchType.LAZY)

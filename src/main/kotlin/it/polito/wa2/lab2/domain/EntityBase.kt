@@ -1,6 +1,7 @@
 package it.polito.wa2.lab2.domain
 
 import java.io.Serializable
+import javax.persistence.Column
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.MappedSuperclass
@@ -14,6 +15,7 @@ abstract class EntityBase<T: Serializable> {
 
     @field:Id
     @field:GeneratedValue
+    @field:Column(updatable = false, nullable = false)
     private var id: T? = null
 
     fun getId(): T? = id

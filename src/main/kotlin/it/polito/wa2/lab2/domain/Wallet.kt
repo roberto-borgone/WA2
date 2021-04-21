@@ -7,7 +7,7 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.NotNull
 
 @Entity
-final class Wallet(
+class Wallet(
     @field:ManyToOne(fetch = FetchType.LAZY)
     @field:JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     @field:NotNull
@@ -16,10 +16,6 @@ final class Wallet(
     @field:Column(nullable = false)
     var currentAmount: BigDecimal = BigDecimal(0.0),
 ): EntityBase<Long>() {
-
-    init {
-        owner.addWallet(this)
-    }
 
     fun addPurchase(transaction: Transaction){
         currentAmount -= transaction.amount
@@ -33,7 +29,7 @@ final class Wallet(
 
 fun Wallet.toDTO(): WalletDTO =
     WalletDTO(
+        getId() as Long,
         owner.getId() as Long,
-        currentAmount,
-        getId() as Long
+        currentAmount
     )

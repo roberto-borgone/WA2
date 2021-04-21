@@ -39,7 +39,7 @@ class User(
     val email: String,
     @field:Column(nullable = false)
     @field:NotBlank
-    var roles: String,
+    var roles: String = "CUSTOMER",
     @field:Column(nullable = false)
     @field:NotNull
     var isEnabled: Boolean = false,

@@ -8,7 +8,7 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.NotNull
 
 @Entity
-final class Transaction(
+class Transaction(
     @field:Min(0)
     @field:Column(nullable = false)
     val amount: BigDecimal,
@@ -23,19 +23,13 @@ final class Transaction(
     @field:NotNull
     @field:Column(nullable = false, columnDefinition = "DATETIME(3)")
     val timestamp: LocalDateTime = LocalDateTime.now()
-): EntityBase<Long>() {
-
-    init {
-        from.addPurchase(this)
-        to.addRecharge(this)
-    }
-}
+): EntityBase<Long>()
 
 fun Transaction.toDTO(): TransactionDTO =
     TransactionDTO(
+        getId() as Long,
         amount,
         from.getId() as Long,
         to.getId() as Long,
-        timestamp,
-        getId() as Long
+        timestamp
     )

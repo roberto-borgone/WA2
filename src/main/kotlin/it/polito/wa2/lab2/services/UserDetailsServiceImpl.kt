@@ -17,15 +17,15 @@ class UserDetailsServiceImpl(private val userRepo: UserRepository): CustomUserDe
     override fun loadUserByUsername(username: String): UserDetails =
         userRepo.findByUsername(username).orElseThrow{ UsernameNotFoundException("User@$username not found") }.toDTO()
 
-    override fun createUser(username: String, password: String, email:String): UserDetailsDTO =
+    override fun createUser(username: String, password: String, confirmPassword: String, email:String): UserDetailsDTO =
         when {
+            password != confirmPassword -> throw PasswordConfirmationException()
             userRepo.existsByUsername(username) -> throw UserAlreadyExistsException(username)
             userRepo.existsByEmail(email) -> throw EmailAlreadyExistsException(email)
             else -> userRepo.save(
                 User(username,
                     password,
-                    email,
-                    "CUSTOMER"
+                    email
                 )
             ).toDTO()
         }

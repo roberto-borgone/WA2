@@ -23,6 +23,7 @@ class WalletServiceImpl(
     override fun addWalletToCustomer(customerId: Long): WalletDTO {
         val customer: Customer = customerRepo.findById(customerId).orElseThrow { CustomerNotFoundException(customerId) }
         val wallet: Wallet = walletRepo.save(Wallet(customer))
+        customer.addWallet(wallet)
         return wallet.toDTO()
     }
 
@@ -41,6 +42,8 @@ class WalletServiceImpl(
             throw NotEnoughFundsException(from)
 
         val transaction: Transaction = transactionRepo.save(Transaction(amount, fromWallet, toWallet))
+        fromWallet.addPurchase(transaction)
+        toWallet.addRecharge(transaction)
 
         return transaction.toDTO()
     }

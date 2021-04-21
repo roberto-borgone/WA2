@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 
 interface CustomUserDetailsService: UserDetailsService {
 
-    fun createUser(username: String, password: String, email:String): UserDetailsDTO
+    fun createUser(username: String, password: String, confirmPassword: String, email:String): UserDetailsDTO
     fun addRoleToUser(username: String, role: RoleName): UserDetailsDTO
     fun removeRoleFromUser(username: String, role: RoleName): UserDetailsDTO
     fun disableUser(username: String): UserDetailsDTO

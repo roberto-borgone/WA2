@@ -6,6 +6,8 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.NotNull
 
 data class TransactionDTO(
+    @field:NotNull
+    val id: Long,
     @field:Min(0)
     val amount: BigDecimal,
     @field:NotNull
@@ -13,7 +15,5 @@ data class TransactionDTO(
     @field:NotNull
     val to: Long,
     @field:NotNull
-    val timestamp: LocalDateTime,
-    @field:NotNull
-    val id: Long
+    val timestamp: LocalDateTime
 )

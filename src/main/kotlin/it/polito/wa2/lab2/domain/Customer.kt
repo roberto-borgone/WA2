@@ -32,9 +32,9 @@ class Customer(
 
 fun Customer.toDTO(): CustomerDTO =
     CustomerDTO(
+        getId() as Long,
         name,
         surname,
         address,
-        wallets.map { it.getId() }.toList(),
-        getId() as Long
+        wallets.map { it.getId() }.toList()
     )

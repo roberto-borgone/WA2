@@ -28,8 +28,6 @@ class AuthController(val userDetailsService: CustomUserDetailsService) {
     @PostMapping("/register")
     fun register(@RequestBody @Valid formDTO: RegistrationFormDTO): ResponseEntity<UserDetailsDTO>{
 
-        // TODO: test this method
-
         val user = userDetailsService.createUser(
             formDTO.username?:"",
             formDTO.password?:"",

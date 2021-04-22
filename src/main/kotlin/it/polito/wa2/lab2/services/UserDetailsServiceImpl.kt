@@ -12,7 +12,7 @@ import javax.transaction.Transactional
 
 @Service
 @Transactional
-class UserDetailsServiceImpl(private val userRepo: UserRepository): CustomUserDetailsService {
+class UserDetailsServiceImpl(private val userRepo: UserRepository, val mailService: MailService): CustomUserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails =
         userRepo.findByUsername(username).orElseThrow{ UsernameNotFoundException("User@$username not found") }.toDTO()
@@ -22,12 +22,8 @@ class UserDetailsServiceImpl(private val userRepo: UserRepository): CustomUserDe
             password != confirmPassword -> throw PasswordConfirmationException()
             userRepo.existsByUsername(username) -> throw UserAlreadyExistsException(username)
             userRepo.existsByEmail(email) -> throw EmailAlreadyExistsException(email)
-            else -> userRepo.save(
-                User(username,
-                    password,
-                    email
-                )
-            ).toDTO()
+            else -> userRepo.save(User(username, password, email)).toDTO()
+                .also { mailService.sendMessage(email) }
         }
 
     override fun addRoleToUser(username: String, role: RoleName): UserDetailsDTO{

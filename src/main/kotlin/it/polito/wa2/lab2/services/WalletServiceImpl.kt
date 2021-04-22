@@ -1,9 +1,7 @@
 package it.polito.wa2.lab2.services
 
-import it.polito.wa2.lab2.domain.Customer
-import it.polito.wa2.lab2.domain.Transaction
-import it.polito.wa2.lab2.domain.Wallet
-import it.polito.wa2.lab2.domain.toDTO
+import it.polito.wa2.lab2.domain.*
+import it.polito.wa2.lab2.dto.CustomerDTO
 import it.polito.wa2.lab2.dto.TransactionDTO
 import it.polito.wa2.lab2.dto.WalletDTO
 import it.polito.wa2.lab2.repositories.*
@@ -19,6 +17,8 @@ class WalletServiceImpl(
     val customerRepo: CustomerRepository,
     val transactionRepo: TransactionRepository
     ): WalletService {
+
+
 
     override fun addWalletToCustomer(customerId: Long): WalletDTO {
         val customer: Customer = customerRepo.findById(customerId).orElseThrow { CustomerNotFoundException(customerId) }
@@ -64,4 +64,7 @@ class WalletServiceImpl(
             transactionRepo.findInWalletById(transactionId, walletId)
                 .orElseThrow { TransactionNotFoundException(transactionId) }.toDTO()
         else throw WalletNotFoundException(walletId)
+
+    override fun createCustomer(user: User): CustomerDTO =
+        customerRepo.save(Customer(user)).toDTO()
 }

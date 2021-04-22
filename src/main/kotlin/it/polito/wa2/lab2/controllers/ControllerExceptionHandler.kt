@@ -29,4 +29,6 @@ class ControllerExceptionHandler {
         ex.bindingResult.allErrors.forEach { errors[(it as FieldError).field] = it.defaultMessage?:"" }
         return ResponseEntity.badRequest().body(errors)
     }
+
+    // TODO: implement registration and registrationConfirm exceptions handlers
 }

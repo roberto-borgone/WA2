@@ -24,6 +24,15 @@ fun String.toRoleName(): RoleName? = when{
     else -> null
 }
 
+/*
+ * TODO: admin creation
+ *
+ * Admin creation process is not yet defined so here i directly create a customer
+ * without checking user role, when admin creation process will be defined this must be
+ * modified
+ *
+ */
+
 @Entity
 @Table(indexes = [Index(name = "index", columnList = "username", unique = true)])
 class User(
@@ -43,7 +52,7 @@ class User(
     @field:Column(nullable = false)
     @field:NotNull
     var isEnabled: Boolean = false,
-    @field:OneToOne(mappedBy = "userProfile", fetch = FetchType.LAZY ,targetEntity = Customer::class, cascade = [CascadeType.REMOVE])
+    @field:OneToOne(mappedBy = "userProfile", fetch = FetchType.LAZY , targetEntity = Customer::class, cascade = [CascadeType.REMOVE])
     var customerProfile: Customer? = null
 ): EntityBase<Long>() {
 

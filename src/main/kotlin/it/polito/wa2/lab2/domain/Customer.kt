@@ -2,27 +2,20 @@ package it.polito.wa2.lab2.domain
 
 import it.polito.wa2.lab2.dto.CustomerDTO
 import javax.persistence.*
-import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 @Entity
 class Customer(
-    @field:NotBlank
-    @field:Column(nullable = false)
-    val name: String,
-    @field:NotBlank
-    @field:Column(nullable = false)
-    val surname: String,
-    @field:NotBlank
-    @field:Column(nullable = false)
-    val address: String,
-    @field:NotNull
-    @field:OneToMany(mappedBy = "owner", targetEntity = Wallet::class)
-    val wallets: MutableSet<Wallet> = mutableSetOf(),
     @field:NotNull
     @field:OneToOne(fetch = FetchType.LAZY)
     @field:JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    val userProfile: User
+    val userProfile: User,
+    val name: String? = null,
+    val surname: String? = null,
+    val address: String? = null,
+    @field:NotNull
+    @field:OneToMany(mappedBy = "owner", targetEntity = Wallet::class)
+    val wallets: MutableSet<Wallet> = mutableSetOf()
 ): EntityBase<Long>() {
 
     fun addWallet(wallet: Wallet){

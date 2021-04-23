@@ -16,12 +16,12 @@ class ControllerExceptionHandler {
         TransactionNotFoundException::class,
         WalletNotFoundException::class
     )
-    fun notFoundHandler(ex: WalletServiceException): ResponseEntity<Map<String,String>> =
+    fun notFoundWalletHandler(ex: WalletServiceException): ResponseEntity<Map<String,String>> =
         ResponseEntity.status(HttpStatus.NOT_FOUND).body(mapOf("error" to (ex.message?:"")))
 
     @ExceptionHandler(NotEnoughFundsException::class, SelfTransactionException::class)
     fun performTransactionHandler(ex: WalletServiceException): ResponseEntity<Map<String,String>> =
-        ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(mapOf("error" to (ex.message?:"")))
+        ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to (ex.message?:"")))
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun validatorsExceptionHandler(ex: MethodArgumentNotValidException): ResponseEntity<Map<String,String>>{
@@ -30,5 +30,11 @@ class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(errors)
     }
 
-    // TODO: implement registration and registrationConfirm exceptions handlers
+    @ExceptionHandler(EmailAlreadyExistsException::class, UserAlreadyExistsException::class)
+    fun registrationDuplicateExceptionHandler(ex: UserDetailsServiceException): ResponseEntity<Map<String, String>> =
+        ResponseEntity.status(HttpStatus.CONFLICT).body(mapOf("error" to (ex.message?:"")))
+
+    @ExceptionHandler(PasswordConfirmationException::class, InvalidTokenException::class)
+    fun registrationBadRequestExceptionHandler(ex: UserDetailsServiceException): ResponseEntity<Map<String, String>> =
+        ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to (ex.message?:"")))
 }

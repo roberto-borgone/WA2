@@ -9,7 +9,10 @@ import java.util.*
 @Repository
 interface EmailVerificationTokenRepository: CrudRepository<EmailVerificationToken, Long> {
     fun findByTokenAndExpiryDateTimeIsAfter(token: UUID, now: LocalDateTime = LocalDateTime.now()): Optional<EmailVerificationToken>
+    fun deleteAllByExpiryDateTimeBefore(now: LocalDateTime = LocalDateTime.now())
 }
 
 fun EmailVerificationTokenRepository.findByToken(token: UUID): Optional<EmailVerificationToken> =
     findByTokenAndExpiryDateTimeIsAfter(token)
+
+fun EmailVerificationTokenRepository.clearExpiredTokens() = deleteAllByExpiryDateTimeBefore()

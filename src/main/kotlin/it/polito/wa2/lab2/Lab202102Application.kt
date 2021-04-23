@@ -6,10 +6,12 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.JavaMailSenderImpl
+import org.springframework.scheduling.annotation.Scheduled
 import java.util.*
 
 @SpringBootApplication
 class Lab202102Application{
+
 	@Bean
 	fun getMailSender(
 		@Value("\${spring.mail.host}") host: String,

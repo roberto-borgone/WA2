@@ -17,7 +17,7 @@ class EmailVerificationToken(
     val user: User,
     @field:NotNull
     @field:Column(nullable = false, columnDefinition = "DATETIME(3)")
-    val expiryDateTime: LocalDateTime = LocalDateTime.now().plusHours(3),
+    val expiryDateTime: LocalDateTime = LocalDateTime.now().plusHours(1),
     @field:NotNull
     @field:Column(nullable = false)
     @Type(type = "org.hibernate.type.UUIDCharType")

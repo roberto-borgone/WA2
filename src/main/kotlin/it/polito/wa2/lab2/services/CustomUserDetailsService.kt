@@ -4,7 +4,6 @@ import it.polito.wa2.lab2.domain.RoleName
 import it.polito.wa2.lab2.dto.CustomerDTO
 import it.polito.wa2.lab2.dto.UserDetailsDTO
 import org.springframework.security.core.userdetails.UserDetailsService
-import java.util.*
 
 interface CustomUserDetailsService: UserDetailsService {
 

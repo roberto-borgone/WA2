@@ -30,7 +30,7 @@ class NotificationServiceImpl(
     @Configuration
     @EnableScheduling
     @Transactional
-    inner class ExpiredTokensCollector(){
+    inner class ExpiredTokensCollector{
 
         @Scheduled(fixedRate = 1000*60*60) // 1 hour
         fun collect() = tokenRepository.clearExpiredTokens()

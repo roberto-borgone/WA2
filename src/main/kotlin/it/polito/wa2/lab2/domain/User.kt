@@ -73,8 +73,5 @@ class User(
 fun User.toDTO(): UserDetailsDTO =
     UserDetailsDTO(
         username,
-        password,
-        email,
-        getRoles().map { GrantedAuthority { it.toString() } }.toMutableSet(),
-        isEnabled
+        getRoles().map { GrantedAuthority { it.toString() } }.toMutableSet()
     )

@@ -6,7 +6,8 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.JavaMailSenderImpl
-import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.security.crypto.factory.PasswordEncoderFactories
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.util.*
 
 @SpringBootApplication
@@ -34,6 +35,9 @@ class Lab202102Application{
 		props["mail.smtp.starttls.enable"] = starttls
 		props["mail.debug"] = debug
 	}
+
+	@Bean
+	fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
 }
 
 fun main(args: Array<String>) {

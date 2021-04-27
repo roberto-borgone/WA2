@@ -2,9 +2,7 @@ package it.polito.wa2.lab2.services
 
 import it.polito.wa2.lab2.dto.TokenDTO
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
-import org.springframework.mail.javamail.MimeMailMessage
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
 

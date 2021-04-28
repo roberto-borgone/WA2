@@ -12,15 +12,15 @@ enum class RoleName{
     CUSTOMER, ADMIN;
 
     override fun toString(): String = when{
-        this == ADMIN -> "ADMIN"
-        this == CUSTOMER -> "CUSTOMER"
+        this == ADMIN -> "ROLE_ADMIN"
+        this == CUSTOMER -> "ROLE_CUSTOMER"
         else -> ""
     }
 }
 
 fun String.toRoleName(): RoleName? = when{
-    this == "ADMIN" -> RoleName.ADMIN
-    this == "CUSTOMER" -> RoleName.CUSTOMER
+    this == "ROLE_ADMIN" -> RoleName.ADMIN
+    this == "ROLE_CUSTOMER" -> RoleName.CUSTOMER
     else -> null
 }
 
@@ -48,7 +48,7 @@ class User(
     val email: String,
     @field:Column(nullable = false)
     @field:NotBlank
-    var roles: String = "CUSTOMER",
+    var roles: String = "ROLE_CUSTOMER",
     @field:Column(nullable = false)
     @field:NotNull
     var isEnabled: Boolean = false,

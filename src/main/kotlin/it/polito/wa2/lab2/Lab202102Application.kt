@@ -6,11 +6,13 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.JavaMailSenderImpl
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.util.*
 
 @SpringBootApplication
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 class Lab202102Application{
 
 	@Bean

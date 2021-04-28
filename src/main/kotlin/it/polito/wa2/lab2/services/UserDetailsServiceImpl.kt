@@ -6,6 +6,7 @@ import it.polito.wa2.lab2.dto.JwtDTO
 import it.polito.wa2.lab2.dto.UserDetailsDTO
 import it.polito.wa2.lab2.repositories.UserRepository
 import it.polito.wa2.lab2.security.JwtUtils
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -55,24 +56,28 @@ class UserDetailsServiceImpl(
     override fun registrationConfirm(token: String): CustomerDTO =
         walletService.createCustomer(notificationService.validateToken(token).orElseThrow{ InvalidTokenException() }.also { it.isEnabled = true })
 
+    @PreAuthorize("hasRole('ADMIN')")
     override fun addRoleToUser(username: String, role: RoleName): UserDetailsDTO{
         val user: User = userRepo.findByUsername(username).orElseThrow{ UsernameNotFoundException("User@$username not found") }
         user.addRole(role)
         return user.toDTO()
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     override fun removeRoleFromUser(username: String, role: RoleName): UserDetailsDTO{
         val user: User = userRepo.findByUsername(username).orElseThrow{ UsernameNotFoundException("User@$username not found") }
         user.removeRole(role)
         return user.toDTO()
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     override fun disableUser(username: String): UserDetailsDTO{
         val user: User = userRepo.findByUsername(username).orElseThrow{ UsernameNotFoundException("User@$username not found") }
         user.isEnabled = false
         return user.toDTO()
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     override fun enableUser(username: String): UserDetailsDTO{
         val user: User = userRepo.findByUsername(username).orElseThrow{ UsernameNotFoundException("User@$username not found") }
         user.isEnabled = true
@@ -81,7 +86,7 @@ class UserDetailsServiceImpl(
 
     override fun authenticateUser(username: String, password: String): JwtDTO {
         val user: User = userRepo.findByUsername(username).orElseThrow { BadCredentialsException() }
-        if(user.password == password) {
+        if(user.password == password && user.isEnabled) {
             val userDetailsDTO = user.toDTO()
             val authentication = UsernamePasswordAuthenticationToken(userDetailsDTO, null, userDetailsDTO.roles)
             return JwtDTO(userDetailsDTO.username, jwtUtils.generateJwtToken(authentication))

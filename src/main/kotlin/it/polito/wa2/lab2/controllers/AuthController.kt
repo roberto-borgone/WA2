@@ -1,8 +1,6 @@
 package it.polito.wa2.lab2.controllers
 
-import it.polito.wa2.lab2.dto.CustomerDTO
-import it.polito.wa2.lab2.dto.RegistrationFormDTO
-import it.polito.wa2.lab2.dto.UserDetailsDTO
+import it.polito.wa2.lab2.dto.*
 import it.polito.wa2.lab2.services.CustomUserDetailsService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -30,10 +28,7 @@ class AuthController(val userDetailsService: CustomUserDetailsService) {
     }
 
     @PostMapping("/signin")
-    fun signin(@RequestBody @Valid formDTO: RegistrationFormDTO) =
-
-        // TODO: implement this method
-
-        ResponseEntity.ok()
+    fun signin(@RequestBody @Valid formDTO: SigninFormDTO): ResponseEntity<JwtDTO> =
+        ResponseEntity.ok(userDetailsService.authenticateUser(formDTO.username?:"", formDTO.password?:""))
 
 }

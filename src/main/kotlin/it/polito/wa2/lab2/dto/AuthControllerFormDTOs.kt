@@ -14,3 +14,10 @@ data class RegistrationFormDTO(
     @field:Email
     val email:String?
     )
+
+data class SigninFormDTO(
+    @field:NotBlank
+    val username: String?,
+    @field:NotBlank
+    val password: String?
+)

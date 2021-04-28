@@ -37,4 +37,8 @@ class ControllerExceptionHandler {
     @ExceptionHandler(PasswordConfirmationException::class, InvalidTokenException::class)
     fun registrationBadRequestExceptionHandler(ex: UserDetailsServiceException): ResponseEntity<Map<String, String>> =
         ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to (ex.message?:"")))
+
+    @ExceptionHandler(BadCredentialsException::class)
+    fun signinExceptionHandler(ex: UserDetailsServiceException): ResponseEntity<Map<String, String>> =
+        ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(mapOf("error" to (ex.message?:"")))
 }

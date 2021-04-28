@@ -1,3 +1,5 @@
 package it.polito.wa2.lab2.security
 
-class InvalidJwtAuthException: Exception("Invalid Jwt")
+import org.springframework.security.core.AuthenticationException
+
+class InvalidJwtAuthException: AuthenticationException("Invalid Jwt")

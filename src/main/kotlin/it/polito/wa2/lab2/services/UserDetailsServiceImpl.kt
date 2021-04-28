@@ -2,8 +2,11 @@ package it.polito.wa2.lab2.services
 
 import it.polito.wa2.lab2.domain.*
 import it.polito.wa2.lab2.dto.CustomerDTO
+import it.polito.wa2.lab2.dto.JwtDTO
 import it.polito.wa2.lab2.dto.UserDetailsDTO
 import it.polito.wa2.lab2.repositories.UserRepository
+import it.polito.wa2.lab2.security.JwtUtils
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
@@ -15,7 +18,8 @@ class UserDetailsServiceImpl(
     private val userRepo: UserRepository,
     val mailService: MailService,
     val notificationService: NotificationService,
-    val walletService: WalletService
+    val walletService: WalletService,
+    val jwtUtils: JwtUtils
     ): CustomUserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails =
@@ -74,4 +78,17 @@ class UserDetailsServiceImpl(
         user.isEnabled = true
         return user.toDTO()
     }
+
+    override fun authenticateUser(username: String, password: String): JwtDTO {
+        val user: User = userRepo.findByUsername(username).orElseThrow { BadCredentialsException() }
+        if(user.password == password) {
+            val userDetailsDTO = user.toDTO()
+            val authentication = UsernamePasswordAuthenticationToken(userDetailsDTO, null, userDetailsDTO.roles)
+            return JwtDTO(userDetailsDTO.username, jwtUtils.generateJwtToken(authentication))
+        }
+
+        throw BadCredentialsException()
+    }
+
+
 }

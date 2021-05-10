@@ -6,8 +6,12 @@ import it.polito.wa2.lab2.dto.JwtDTO
 import it.polito.wa2.lab2.dto.UserDetailsDTO
 import it.polito.wa2.lab2.repositories.UserRepository
 import it.polito.wa2.lab2.security.JwtUtils
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
@@ -24,7 +28,7 @@ class UserDetailsServiceImpl(
     ): CustomUserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails =
-        userRepo.findByUsername(username).orElseThrow{ UsernameNotFoundException("User@$username not found") }.toDTO()
+        userRepo.findByUsername(username).orElseThrow{ UsernameNotFoundException("User@$username not found") }.toDTO(true)
 
     /*
     * TODO: admin creation
@@ -84,15 +88,13 @@ class UserDetailsServiceImpl(
         return user.toDTO()
     }
 
-    override fun authenticateUser(username: String, password: String): JwtDTO {
-        val user: User = userRepo.findByUsername(username).orElseThrow { BadCredentialsException() }
-        if(user.password == password && user.isEnabled) {
-            val userDetailsDTO = user.toDTO()
-            val authentication = UsernamePasswordAuthenticationToken(userDetailsDTO, null, userDetailsDTO.roles)
-            return JwtDTO(userDetailsDTO.username, jwtUtils.generateJwtToken(authentication))
+    override fun authenticateUser(username: String, password: String, authenticationManager: AuthenticationManager): JwtDTO {
+        try{
+            val authentication: Authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(username, password))
+            return JwtDTO(authentication.name, jwtUtils.generateJwtToken(authentication))
+        }catch(ex: AuthenticationException){
+            throw BadCredentialsException()
         }
-
-        throw BadCredentialsException()
     }
 
 

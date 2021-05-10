@@ -70,7 +70,15 @@ class User(
     }
 }
 
-fun User.toDTO(): UserDetailsDTO =
+fun User.toDTO(withDetails: Boolean = false): UserDetailsDTO =
+    if (withDetails)
+        UserDetailsDTO(
+            username,
+            getRoles().map { GrantedAuthority { it.toString() } }.toMutableSet(),
+            password,
+            isEnabled
+        )
+    else
     UserDetailsDTO(
         username,
         getRoles().map { GrantedAuthority { it.toString() } }.toMutableSet()

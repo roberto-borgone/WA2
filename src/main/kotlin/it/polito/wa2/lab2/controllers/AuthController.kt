@@ -3,13 +3,17 @@ package it.polito.wa2.lab2.controllers
 import it.polito.wa2.lab2.dto.*
 import it.polito.wa2.lab2.services.CustomUserDetailsService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/auth")
-class AuthController(val userDetailsService: CustomUserDetailsService) {
+class AuthController(
+    val userDetailsService: CustomUserDetailsService,
+    val authenticationManager: AuthenticationManager
+) {
 
     @GetMapping("/registrationConfirm")
     fun confirmRegistration(@RequestParam("token") token: String): ResponseEntity<CustomerDTO> =
@@ -29,6 +33,6 @@ class AuthController(val userDetailsService: CustomUserDetailsService) {
 
     @PostMapping("/signin")
     fun signin(@RequestBody @Valid formDTO: SigninFormDTO): ResponseEntity<JwtDTO> =
-        ResponseEntity.ok(userDetailsService.authenticateUser(formDTO.username?:"", formDTO.password?:""))
+        ResponseEntity.ok(userDetailsService.authenticateUser(formDTO.username?:"", formDTO.password?:"", authenticationManager))
 
 }

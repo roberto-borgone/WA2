@@ -4,6 +4,7 @@ import it.polito.wa2.lab2.domain.RoleName
 import it.polito.wa2.lab2.dto.CustomerDTO
 import it.polito.wa2.lab2.dto.JwtDTO
 import it.polito.wa2.lab2.dto.UserDetailsDTO
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.core.userdetails.UserDetailsService
 
 interface CustomUserDetailsService: UserDetailsService {
@@ -14,5 +15,5 @@ interface CustomUserDetailsService: UserDetailsService {
     fun removeRoleFromUser(username: String, role: RoleName): UserDetailsDTO
     fun disableUser(username: String): UserDetailsDTO
     fun enableUser(username: String): UserDetailsDTO
-    fun authenticateUser(username: String, password: String): JwtDTO
+    fun authenticateUser(username: String, password: String, authenticationManager: AuthenticationManager): JwtDTO
 }

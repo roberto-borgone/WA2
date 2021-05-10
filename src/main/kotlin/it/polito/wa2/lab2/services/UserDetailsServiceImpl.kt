@@ -6,7 +6,6 @@ import it.polito.wa2.lab2.dto.JwtDTO
 import it.polito.wa2.lab2.dto.UserDetailsDTO
 import it.polito.wa2.lab2.repositories.UserRepository
 import it.polito.wa2.lab2.security.JwtUtils
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
